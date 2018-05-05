@@ -1,18 +1,69 @@
 .app {
   width: 100vw;
   height: 100vh;
+  overflow-y: hidden;
 }
 
 .app > * {
-  display: inline-block;
-  height: 100%;
+  width: 100%;
 }
 
 .app-map {
-  width: 70%;
+  height: 400px;
 }
 
 .app-box {
-  width: 30%;
-  max-width: 300px;
+  height: calc(100% - 400px);
+  overflow-y: auto;
 }
+
+.ant-table-thead > tr > th.table-column--title,
+.ant-table-thead > tr > th.table-column--year,
+.ant-table-thead > tr > th.table-column--company,
+.ant-table-thead > tr > th.table-column--director,
+.ant-table-thead > tr > th.table-column--actors,
+.ant-table-tbody > tr > td.table-column--title,
+.ant-table-tbody > tr > td.table-column--year,
+.ant-table-tbody > tr > td.table-column--company,
+.ant-table-tbody > tr > td.table-column--director,
+.ant-table-tbody > tr > td.table-column--actors {
+  word-break: unset;
+  white-space: pre-line;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.ant-table-tbody {
+  vertical-align: top;
+}
+
+.table-column--title {
+  width: 30%;
+  min-width: 180px;
+}
+
+.table-column--year {
+  width: 10%;
+  min-width: 85px;
+}
+
+.table-column--company,
+.table-column--director {
+  width: 20%;
+  min-width: 150px;
+}
+
+.table-column--actors {
+  width: 20%;
+  min-width: 180px;
+}
+
+.table-column--actors ul {
+  margin: 0;
+  padding: 0;
+}
+
+.table-column--actors li {
+  list-style: none;
+}
+
