@@ -1,0 +1,49 @@
+.ant-table-thead > tr > th.movie-table-column--title,
+.ant-table-thead > tr > th.movie-table-column--year,
+.ant-table-thead > tr > th.movie-table-column--company,
+.ant-table-thead > tr > th.movie-table-column--director,
+.ant-table-thead > tr > th.movie-table-column--actors,
+.ant-table-tbody > tr > td.movie-table-column--title,
+.ant-table-tbody > tr > td.movie-table-column--year,
+.ant-table-tbody > tr > td.movie-table-column--company,
+.ant-table-tbody > tr > td.movie-table-column--director,
+.ant-table-tbody > tr > td.movie-table-column--actors {
+  word-break: unset;
+  white-space: pre-line;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.ant-table-tbody {
+  vertical-align: top;
+}
+
+.movie-table-column--title {
+  width: 30%;
+  min-width: 180px;
+}
+
+.movie-table-column--year {
+  width: 10%;
+  min-width: 85px;
+}
+
+.movie-table-column--company,
+.movie-table-column--director {
+  width: 20%;
+  min-width: 150px;
+}
+
+.movie-table-column--actors {
+  width: 20%;
+  min-width: 180px;
+}
+
+.movie-table-column--actors ul {
+  margin: 0;
+  padding: 0;
+}
+
+.movie-table-column--actors li {
+  list-style: none;
+}

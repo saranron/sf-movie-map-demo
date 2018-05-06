@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { Table } from 'antd';
 import 'antd/dist/antd.css';
 
 import Map from './components/Map';
+import MovieTable from './components/MovieTable';
 import { FETCH_END_POINT, DATA_ROW_LIMIT } from './constants';
 import './App.css';
-
 
 class App extends Component {
   constructor(props) {
@@ -56,9 +55,9 @@ class App extends Component {
     actor_3,
   }) => ({
     title,
-    release_year,
     director,
-    production_company,
+    releaseYear: release_year,
+    productionCompany: production_company,
     actors: [
       actor_1,
       actor_2,
@@ -87,66 +86,16 @@ class App extends Component {
     return movies;
   };
 
-  renderLocations = movie => (
-    movie.locations.length === 0 ?
-      <div>No location data</div> :
-      <ul>
-        {
-          movie.locations.map(location => (
-            <li key={location}>{location}</li>
-          ))
-        }
-      </ul>
-  );
-
   render() {
-    const columns = [{
-      title: 'Title',
-      dataIndex: 'title',
-      key: 'title',
-      className: 'table-column--title',
-    }, {
-      title: 'Release Year',
-      dataIndex: 'release_year',
-      key: 'release_year',
-      className: 'table-column--year',
-    }, {
-      title: 'Production Company',
-      dataIndex: 'production_company',
-      key: 'production_company',
-      className: 'table-column--company',
-    }, {
-      title: 'Director',
-      dataIndex: 'director',
-      key: 'director',
-      className: 'table-column--director',
-    }, {
-      title: 'Actors',
-      key: 'actors',
-      dataIndex: 'actors',
-      className: 'table-column--actors',
-      render: (text, record) => (
-        <ul>
-          {
-            record.actors.map(actor => (<li key={actor}>{actor}</li>))
-          }
-        </ul>
-      ),
-    }];
     return (
       <div className="app">
         <div className="app-map">
           <Map />
         </div>
         <div className="app-box">
-          <Table
-            className="app-table"
-            rowKey="title"
-            loading={this.state.isLoading}
-            dataSource={this.state.movies}
-            columns={columns}
-            expandRowByClick
-            expandedRowRender={this.renderLocations}
+          <MovieTable
+            isLoading={this.state.isLoading}
+            movies={this.state.movies}
           />
         </div>
       </div>
