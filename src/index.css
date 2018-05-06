@@ -7,3 +7,18 @@ body {
 div {
   box-sizing: border-box;
 }
+
+.app-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+.header {
+  height: 32px;
+  line-height: 32px;
+  font-size: 18px;
+  font-weight: 700;
+  background-color: #ddd;
+  color: rgba(0, 0, 0, 0.4);
+  padding: 0 8px;
+}
