@@ -1,4 +1,9 @@
-export const LOCATION_DEFAULT = 'San Francisco, USA';
+const DEFAULT_LOCATION = {
+  lat: 37.7749295,
+  lng: -122.4194155,
+};
+const DEFAULT_PLACE = 'San Francisco, CA, US';
+const DEFAULT_ZOOM = 11;
 
 export const MAP_API_ENDPOINT = [
   'https://maps.googleapis.com/maps/api/js?v=3.exp',
@@ -7,6 +12,7 @@ export const MAP_API_ENDPOINT = [
 ].join('&');
 
 export default {
-  LOCATION_DEFAULT,
-  MAP_API_ENDPOINT,
+  DEFAULT_LOCATION,
+  DEFAULT_PLACE,
+  DEFAULT_ZOOM,
 };
