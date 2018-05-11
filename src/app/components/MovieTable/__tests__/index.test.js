@@ -1,10 +1,21 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { Table } from 'antd';
-import MovieTable from './index';
+import MovieTable from '../index';
 
 describe('<MovieTable />', () => {
-  const wrapper = shallow(<MovieTable />);
+  const props = {
+    onMovieSelectionChanged: jest.fn(),
+  };
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = shallow(<MovieTable {...props} />);
+  });
+
+  afterEach(() => {
+    props.onMovieSelectionChanged.mockReset();
+  });
 
   it('should render a Table', () => {
     expect(wrapper.find(Table)).toExist();
@@ -27,7 +38,7 @@ describe('<MovieTable />', () => {
       const movie = { locations: [] };
       const actual = shallow(wrapper.instance().renderLocations(movie));
 
-      expect(actual).toContainReact(<div>No location data</div>);
+      expect(actual).toContainReact(<div className="movie-location-list--empty">No location data</div>);
     });
 
     it('should render the location list items', () => {
@@ -35,6 +46,18 @@ describe('<MovieTable />', () => {
       const actual = shallow(wrapper.instance().renderLocations(movie));
 
       expect(actual.find('li').length).toBe(movie.locations.length);
+    });
+  });
+
+  describe('rowSelection', () => {
+    it('should invoke onMovieSelectionChanged onChange', () => {
+      const selectedRowKeys = [1, 2, 3];
+      const selectedRows = [{ key: 1 }, { key: 2 }, { key: 3 }];
+
+      wrapper.instance().rowSelection.onChange(selectedRowKeys, selectedRows);
+
+      expect(props.onMovieSelectionChanged).toHaveBeenCalledTimes(1);
+      expect(props.onMovieSelectionChanged).toHaveBeenCalledWith(selectedRows);
     });
   });
 });

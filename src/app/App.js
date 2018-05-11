@@ -12,6 +12,7 @@ class App extends Component {
 
     this.state = {
       movies: [],
+      markedPlaces: [],
       isLoading: false,
     };
   }
@@ -19,6 +20,11 @@ class App extends Component {
   componentDidMount() {
     this.getMovies();
   }
+
+  onMovieSelectionChanged = (movies) => {
+    const places = movies.reduce((locations, movie) => [...locations, ...movie.locations], []);
+    this.setState({ markedPlaces: places });
+  };
 
   getMovies = async () => {
     this.setState({ isLoading: true });
@@ -30,18 +36,19 @@ class App extends Component {
     } finally {
       this.setState({ isLoading: false });
     }
-  }
+  };
 
   render() {
     return (
       <div className="app">
         <div className="app-map">
-          <Map />
+          <Map places={this.state.markedPlaces} />
         </div>
         <div className="app-box">
           <MovieTable
             isLoading={this.state.isLoading}
             movies={this.state.movies}
+            onMovieSelectionChanged={this.onMovieSelectionChanged}
           />
         </div>
       </div>

@@ -47,3 +47,9 @@
 .movie-table-column--actors li {
   list-style: none;
 }
+
+.movie-location-list--empty {
+  width: 100%;
+  text-align: center;
+}
+

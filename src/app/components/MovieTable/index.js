@@ -39,16 +39,22 @@ class MovieTable extends React.Component {
     ),
   }]);
 
+  rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      this.props.onMovieSelectionChanged(selectedRows);
+    },
+  };
+
   renderLocations = movie => (
     movie.locations.length === 0 ?
-      <div>No location data</div> :
-      <ul>
+      <div className="movie-location-list--empty">No location data</div> :
+      <div className="movie-location-list">
         {
           movie.locations.map(location => (
             <li key={location}>{location}</li>
           ))
         }
-      </ul>
+      </div>
   );
 
   render() {
@@ -61,6 +67,7 @@ class MovieTable extends React.Component {
         columns={this.getColumnsDefinition()}
         expandRowByClick
         expandedRowRender={this.renderLocations}
+        rowSelection={this.rowSelection}
       />
     );
   }
@@ -70,6 +77,7 @@ MovieTable.defaultProps = {
   className: '',
   isLoading: false,
   movies: [],
+  onMovieSelectionChanged: () => {},
 };
 
 MovieTable.propTypes = {
@@ -83,6 +91,7 @@ MovieTable.propTypes = {
     locations: PropTypes.arrayOf(PropTypes.string),
     actors: PropTypes.arrayOf(PropTypes.string),
   })),
+  onMovieSelectionChanged: PropTypes.func,
 };
 
 export default MovieTable;

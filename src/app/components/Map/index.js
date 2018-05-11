@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose, withProps, lifecycle } from 'recompose';
-import { GoogleMap, Marker, withGoogleMap, withScriptjs } from 'react-google-maps';
+import { GoogleMap, withGoogleMap, withScriptjs } from 'react-google-maps';
 
+import AddressMarker from './AddressMarker';
 import MAP_DEFAULTS, { MAP_API_ENDPOINT } from './constants';
+import geocoderApi from './geocoderApi';
 
 class Map extends React.Component {
   constructor(props) {
     super(props);
+    this.geocoder = null;
     this.state = {
       defaultLocation: MAP_DEFAULTS.DEFAULT_LOCATION,
     };
@@ -15,24 +18,35 @@ class Map extends React.Component {
 
   render() {
     const { defaultLocation } = this.state;
-    const { isMarkerShown } = this.props;
+    const { places } = this.props;
+
     return (
       <GoogleMap
         defaultZoom={MAP_DEFAULTS.DEFAULT_ZOOM}
         defaultCenter={defaultLocation}
       >
-        {isMarkerShown && <Marker position={defaultLocation} />}
+        {
+          places.map(place => (
+            <AddressMarker
+              key={place}
+              address={`${place} ${MAP_DEFAULTS.DEFAULT_PLACE}`}
+              onAddressLoaded={this.onAddressLoaded}
+              onAddressRemoved={this.onAddressRemoved}
+              defaultDraggable={false}
+            />
+          ))
+        }
       </GoogleMap>
     );
   }
 }
 
 Map.defaultProps = {
-  isMarkerShown: true,
+  places: [],
 };
 
 Map.propTypes = {
-  isMarkerShown: PropTypes.bool,
+  places: PropTypes.arrayOf(PropTypes.string),
 };
 
 const mapProps = {
@@ -44,19 +58,12 @@ const mapProps = {
 
 const withLifeCycle = lifecycle({
   componentDidMount() {
+    const request = { address: MAP_DEFAULTS.DEFAULT_PLACE };
     const geocoder = new window.google.maps.Geocoder();
-    geocoder.geocode(
-      { address: MAP_DEFAULTS.DEFAULT_PLACE },
-      (results, status) => {
-        if (status === 'OK') {
-          const { location } = results[0].geometry;
-          this.setState({ defaultLocation: { lat: location.lat(), lng: location.lng() } });
-        } else {
-          // TODO: find a better way to handle error
-          console.error(`Geocode was not successful for the following reason: ${status}`);
-        }
-      },
-    );
+    geocoderApi(geocoder, request).then((result) => {
+      const { location } = result.geometry;
+      this.setState({ defaultLocation: { lat: location.lat(), lng: location.lng() } });
+    });
   },
 });
 

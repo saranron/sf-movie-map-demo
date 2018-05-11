@@ -7,8 +7,8 @@ import MovieTable from './components/MovieTable';
 describe('<App />', () => {
   let wrapper;
   const movies = [
-    { title: 'title1' },
-    { title: 'title2' },
+    { title: 'title1', locations: 'location1' },
+    { title: 'title2', locations: 'location2' },
   ];
 
   beforeAll(() => {
@@ -28,11 +28,20 @@ describe('<App />', () => {
   });
 
   it('should call api on componentDidMount', async () => {
-    const expected = movies.map(movie => expect.objectContaining(movie));
+    const expected = movies.map(movie => expect.objectContaining({
+      ...movie,
+      locations: [movie.locations],
+    }));
 
     await wrapper.instance().componentDidMount();
-    wrapper.update();
 
     expect(wrapper).toHaveState({ movies: expected });
+  });
+
+  test('onMovieSelectionChanged saves all locations of movie objects in state', () => {
+    const expected = ['location1', 'location2'];
+    wrapper.instance().onMovieSelectionChanged(movies);
+
+    expect(wrapper).toHaveState({ markedPlaces: expected });
   });
 });

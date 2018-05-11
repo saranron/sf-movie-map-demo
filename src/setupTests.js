@@ -11,3 +11,14 @@ const localStorageMock = {
   clear: jest.fn(),
 };
 global.localStorage = localStorageMock;
+
+window.google = {
+  maps: {
+    Marker: class {
+      setMap = jest.fn();
+    },
+    Geocoder: class {
+      geocode = jest.fn();
+    },
+  },
+};

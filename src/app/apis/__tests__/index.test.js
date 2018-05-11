@@ -1,4 +1,4 @@
-import Api, * as helpers from './index';
+import Api, * as helpers from '../index';
 
 describe('createMovieObject', () => {
   it('should rename fields release_year and production_company', () => {
