@@ -14,6 +14,12 @@ describe('<AddressMarker />', () => {
     expect(wrapper.find(Marker).length).toBe(1);
   });
 
+  it('should render its children', () => {
+    const WrappedComponent = () => (<div>wrapped component</div>);
+    const wrapper = shallow(<AddressMarker {...props}><WrappedComponent /></AddressMarker>);
+    expect(wrapper.find(WrappedComponent)).toExist();
+  });
+
   describe('lifecycle', () => {
     const onAddressLoaded = jest.fn();
     const onAddressRemoved = jest.fn();

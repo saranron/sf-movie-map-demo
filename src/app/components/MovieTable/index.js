@@ -5,6 +5,10 @@ import { Table } from 'antd';
 import './styles.css';
 
 class MovieTable extends React.Component {
+  onLocationClicked = location => () => {
+    this.props.onLocationSelectionChanged({ ...location });
+  };
+
   getColumnsDefinition = () => ([{
     title: 'Title',
     dataIndex: 'title',
@@ -51,7 +55,13 @@ class MovieTable extends React.Component {
       <div className="movie-location-list">
         {
           movie.locations.map(location => (
-            <li key={location.location}>{location.location}</li>
+            // eslint-disable-next-line
+            <li
+              key={location.location}
+              onClick={this.onLocationClicked(location)}
+            >
+              {location.location}
+            </li>
           ))
         }
       </div>
@@ -78,6 +88,7 @@ MovieTable.defaultProps = {
   isLoading: false,
   movies: [],
   onMovieSelectionChanged: () => {},
+  onLocationSelectionChanged: () => {},
 };
 
 MovieTable.propTypes = {
@@ -95,6 +106,7 @@ MovieTable.propTypes = {
     actors: PropTypes.arrayOf(PropTypes.string),
   })),
   onMovieSelectionChanged: PropTypes.func,
+  onLocationSelectionChanged: PropTypes.func,
 };
 
 export default MovieTable;

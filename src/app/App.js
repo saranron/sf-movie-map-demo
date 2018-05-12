@@ -21,11 +21,6 @@ class App extends Component {
     this.getMovies();
   }
 
-  onMovieSelectionChanged = (movies) => {
-    const places = movies.reduce((locations, movie) => [...locations, ...movie.locations], []);
-    this.setState({ markedPlaces: places });
-  };
-
   getMovies = async () => {
     this.setState({ isLoading: true });
     try {
@@ -38,6 +33,15 @@ class App extends Component {
     }
   };
 
+  selectMovieSelections = (movies) => {
+    const places = movies.reduce((locations, movie) => [...locations, ...movie.locations], []);
+    this.setState({ markedPlaces: places });
+  };
+
+  selectSingleLocation = (location) => {
+    this.setState({ markedPlaces: [location] });
+  };
+
   render() {
     return (
       <div className="app">
@@ -48,7 +52,8 @@ class App extends Component {
           <MovieTable
             isLoading={this.state.isLoading}
             movies={this.state.movies}
-            onMovieSelectionChanged={this.onMovieSelectionChanged}
+            onMovieSelectionChanged={this.selectMovieSelections}
+            onLocationSelectionChanged={this.selectSingleLocation}
           />
         </div>
       </div>

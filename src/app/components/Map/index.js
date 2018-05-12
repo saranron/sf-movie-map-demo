@@ -13,26 +13,19 @@ class Map extends React.Component {
     this.geocoder = null;
     this.state = {
       defaultLocation: MAP_DEFAULTS.DEFAULT_LOCATION,
-      visibleWindowIndices: [],
+      visibleWindowIndex: undefined,
     };
   }
 
   toggleInfoWindow = index => () => {
-    const { visibleWindowIndices } = this.state;
-    let newVisibleWindowIndices;
-    if (visibleWindowIndices.includes(index)) {
-      newVisibleWindowIndices = visibleWindowIndices.reduce((allIndices, visibleIndex) => (
-        visibleIndex === index ? [...allIndices] : [...allIndices, visibleIndex]
-      ), []);
-    } else {
-      newVisibleWindowIndices = [...visibleWindowIndices, index];
-    }
+    const { visibleWindowIndex } = this.state;
+    const newVisibleWindowIndex = visibleWindowIndex === index ? undefined : index;
 
-    this.setState({ visibleWindowIndices: newVisibleWindowIndices });
+    this.setState({ visibleWindowIndex: newVisibleWindowIndex });
   };
 
   render() {
-    const { defaultLocation, visibleWindowIndices } = this.state;
+    const { defaultLocation, visibleWindowIndex } = this.state;
     const { places } = this.props;
 
     return (
@@ -51,7 +44,7 @@ class Map extends React.Component {
               defaultDraggable={false}
             >
               {
-                visibleWindowIndices.includes(index) && place.funFact ?
+                visibleWindowIndex === index && place.funFact ?
                   <InfoWindow key={place.location} onCloseClick={this.toggleInfoWindow(index)}>
                     <span>{ place.funFact }</span>
                   </InfoWindow> :
