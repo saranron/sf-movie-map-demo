@@ -6,6 +6,7 @@ import MovieTable from '../index';
 describe('<MovieTable />', () => {
   const props = {
     onMovieSelectionChanged: jest.fn(),
+    onLocationSelectionChanged: jest.fn(),
   };
   let wrapper;
 
@@ -19,6 +20,15 @@ describe('<MovieTable />', () => {
 
   it('should render a Table', () => {
     expect(wrapper.find(Table)).toExist();
+  });
+
+  test('onLocationClicked should invoke onLocationSelectionChanged callback', () => {
+    const location = { location: 'location' };
+
+    wrapper.instance().onLocationClicked(location)();
+
+    expect(props.onLocationSelectionChanged).toHaveBeenCalledTimes(1);
+    expect(props.onLocationSelectionChanged).toHaveBeenCalledWith(location);
   });
 
   describe('getColumnsDefinition', () => {
@@ -42,7 +52,7 @@ describe('<MovieTable />', () => {
     });
 
     it('should render the location list items', () => {
-      const movie = { locations: ['1', '2', '3', '4', '5'] };
+      const movie = { locations: [{ location: '1' }, { location: '2' }] };
       const actual = shallow(wrapper.instance().renderLocations(movie));
 
       expect(actual.find('li').length).toBe(movie.locations.length);

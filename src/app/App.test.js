@@ -27,10 +27,10 @@ describe('<App />', () => {
     expect(wrapper.find(MovieTable)).toExist();
   });
 
-  it('should call api on componentDidMount', async () => {
+  test('componentDidMount should call api to get movies', async () => {
     const expected = movies.map(movie => expect.objectContaining({
       ...movie,
-      locations: [movie.locations],
+      locations: [expect.objectContaining({ location: movie.locations })],
     }));
 
     await wrapper.instance().componentDidMount();
@@ -38,9 +38,24 @@ describe('<App />', () => {
     expect(wrapper).toHaveState({ movies: expected });
   });
 
-  test('onMovieSelectionChanged saves all locations of movie objects in state', () => {
-    const expected = ['location1', 'location2'];
-    wrapper.instance().onMovieSelectionChanged(movies);
+  test('selectMovieLocations saves all locations of movie objects in state', () => {
+    const selectedMovies = [
+      { locations: [{ location: 'location1' }] },
+      { locations: [{ location: 'location2' }] },
+    ];
+    const expected = [
+      expect.objectContaining({ location: 'location1' }),
+      expect.objectContaining({ location: 'location2' }),
+    ];
+    wrapper.instance().selectMovieLocations(selectedMovies);
+
+    expect(wrapper).toHaveState({ markedPlaces: expected });
+  });
+
+  test('selectSingleLocation saves the selected location in state', () => {
+    const location = { location: 'location1' };
+    const expected = [location];
+    wrapper.instance().selectSingleLocation(location);
 
     expect(wrapper).toHaveState({ markedPlaces: expected });
   });

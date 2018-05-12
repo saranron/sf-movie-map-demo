@@ -25,9 +25,10 @@ describe('createMovieObject', () => {
   });
 
   it('should return locations array', () => {
-    const locations = 'location1';
-    const object = { locations };
-    const expected = { locations: [locations] };
+    const location = 'location1';
+    const funFact = 'fun fact';
+    const object = { locations: location, fun_facts: funFact };
+    const expected = { locations: [{ location, funFact }] };
 
     const actual = helpers.createMovieObject(object);
 

@@ -33,7 +33,7 @@ class App extends Component {
     }
   };
 
-  selectMovieSelections = (movies) => {
+  selectMovieLocations = (movies) => {
     const places = movies.reduce((locations, movie) => [...locations, ...movie.locations], []);
     this.setState({ markedPlaces: places });
   };
@@ -52,7 +52,7 @@ class App extends Component {
           <MovieTable
             isLoading={this.state.isLoading}
             movies={this.state.movies}
-            onMovieSelectionChanged={this.selectMovieSelections}
+            onMovieSelectionChanged={this.selectMovieLocations}
             onLocationSelectionChanged={this.selectSingleLocation}
           />
         </div>
