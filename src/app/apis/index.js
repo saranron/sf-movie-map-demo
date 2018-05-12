@@ -10,6 +10,7 @@ export const createMovieObject = ({
   actor_1,
   actor_2,
   actor_3,
+  fun_facts,
 }) => ({
   title,
   director,
@@ -21,8 +22,8 @@ export const createMovieObject = ({
     actor_3,
   ].filter(actor => actor !== undefined),
   locations: [
-    locations,
-  ].filter(location => Boolean(location)),
+    { location: locations, funFact: fun_facts },
+  ].filter(location => Boolean(location.location)),
 });
 /* eslint-enable camelcase */
 
@@ -35,7 +36,7 @@ const groupMoviesByTitle = (movies, location) => {
 
   const latestMovie = movies[movies.length - 1];
   if (latestMovie.title === location.title) {
-    latestMovie.locations.push(location.locations);
+    latestMovie.locations.push({ location: location.locations, funFact: location.fun_facts });
   } else {
     const nextMovie = createMovieObject(location);
     movies.push(nextMovie);

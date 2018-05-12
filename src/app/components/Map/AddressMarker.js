@@ -48,16 +48,21 @@ class AddressMarker extends React.Component {
   render() {
     const { latLng } = this.state;
     const {
-      address, onAddressLoaded, onAddressRemoved, onAddressError, ...restProps
+      address, onAddressLoaded, onAddressRemoved, onAddressError, children, ...restProps
     } = this.props;
 
     return (
-      <Marker {...restProps} position={latLng} />
+      <Marker {...restProps} position={latLng}>
+        {
+          children ? React.cloneElement(children) : null
+        }
+      </Marker>
     );
   }
 }
 
 AddressMarker.defaultProps = {
+  children: null,
   onAddressLoaded: () => {},
   onAddressRemoved: () => {},
   onAddressError: () => {},
@@ -65,6 +70,7 @@ AddressMarker.defaultProps = {
 
 AddressMarker.propTypes = {
   address: PropTypes.string.isRequired,
+  children: PropTypes.node,
   onAddressLoaded: PropTypes.func,
   onAddressRemoved: PropTypes.func,
   onAddressError: PropTypes.func,

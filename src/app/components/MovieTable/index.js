@@ -51,7 +51,7 @@ class MovieTable extends React.Component {
       <div className="movie-location-list">
         {
           movie.locations.map(location => (
-            <li key={location}>{location}</li>
+            <li key={location.location}>{location.location}</li>
           ))
         }
       </div>
@@ -88,7 +88,10 @@ MovieTable.propTypes = {
     director: PropTypes.string,
     releaseYear: PropTypes.string,
     productionCompany: PropTypes.string,
-    locations: PropTypes.arrayOf(PropTypes.string),
+    locations: PropTypes.arrayOf(PropTypes.shape({
+      location: PropTypes.string,
+      funFact: PropTypes.string,
+    })),
     actors: PropTypes.arrayOf(PropTypes.string),
   })),
   onMovieSelectionChanged: PropTypes.func,

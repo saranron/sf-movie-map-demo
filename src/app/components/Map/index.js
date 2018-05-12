@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose, withProps, lifecycle } from 'recompose';
-import { GoogleMap, withGoogleMap, withScriptjs } from 'react-google-maps';
+import { GoogleMap, withGoogleMap, withScriptjs, InfoWindow } from 'react-google-maps';
 
 import AddressMarker from './AddressMarker';
 import MAP_DEFAULTS, { MAP_API_ENDPOINT } from './constants';
@@ -13,11 +13,26 @@ class Map extends React.Component {
     this.geocoder = null;
     this.state = {
       defaultLocation: MAP_DEFAULTS.DEFAULT_LOCATION,
+      visibleWindowIndices: [],
     };
   }
 
+  toggleInfoWindow = index => () => {
+    const { visibleWindowIndices } = this.state;
+    let newVisibleWindowIndices;
+    if (visibleWindowIndices.includes(index)) {
+      newVisibleWindowIndices = visibleWindowIndices.reduce((allIndices, visibleIndex) => (
+        visibleIndex === index ? [...allIndices] : [...allIndices, visibleIndex]
+      ), []);
+    } else {
+      newVisibleWindowIndices = [...visibleWindowIndices, index];
+    }
+
+    this.setState({ visibleWindowIndices: newVisibleWindowIndices });
+  };
+
   render() {
-    const { defaultLocation } = this.state;
+    const { defaultLocation, visibleWindowIndices } = this.state;
     const { places } = this.props;
 
     return (
@@ -26,14 +41,23 @@ class Map extends React.Component {
         defaultCenter={defaultLocation}
       >
         {
-          places.map(place => (
+          places.map((place, index) => (
             <AddressMarker
-              key={place}
-              address={`${place} ${MAP_DEFAULTS.DEFAULT_PLACE}`}
+              key={place.location}
+              address={`${place.location} ${MAP_DEFAULTS.DEFAULT_PLACE}`}
               onAddressLoaded={this.onAddressLoaded}
               onAddressRemoved={this.onAddressRemoved}
+              onClick={this.toggleInfoWindow(index)}
               defaultDraggable={false}
-            />
+            >
+              {
+                visibleWindowIndices.includes(index) && place.funFact ?
+                  <InfoWindow key={place.location} onCloseClick={this.toggleInfoWindow(index)}>
+                    <span>{ place.funFact }</span>
+                  </InfoWindow> :
+                  null
+              }
+            </AddressMarker>
           ))
         }
       </GoogleMap>
@@ -46,7 +70,10 @@ Map.defaultProps = {
 };
 
 Map.propTypes = {
-  places: PropTypes.arrayOf(PropTypes.string),
+  places: PropTypes.arrayOf(PropTypes.shape({
+    location: PropTypes.string,
+    funFact: PropTypes.string,
+  })),
 };
 
 const mapProps = {
