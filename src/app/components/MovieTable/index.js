@@ -32,8 +32,7 @@ class MovieTable extends React.Component {
       <Table
         className={`movie-table ${this.props.className}`}
         rowKey="title"
-        size="middle"
-        pagination="top"
+        size="small"
         loading={this.props.isLoading}
         dataSource={this.props.movies}
         columns={this.getColumnsDefinition()}

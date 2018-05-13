@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose, withProps, lifecycle } from 'recompose';
+import { compose, withProps } from 'recompose';
 import { GoogleMap, withGoogleMap, withScriptjs, InfoWindow } from 'react-google-maps';
 
 import AddressMarker from './AddressMarker';
@@ -47,15 +47,13 @@ export class Map extends React.Component {
             <AddressMarker
               key={place.location}
               address={`${place.location} ${MAP_DEFAULTS.DEFAULT_PLACE}`}
-              onAddressLoaded={this.onAddressLoaded}
-              onAddressRemoved={this.onAddressRemoved}
               onClick={this.toggleInfoWindow(index)}
               defaultDraggable={false}
             >
               {
                 visibleWindowIndex === index ?
                   <InfoWindow key={place.location} onCloseClick={this.toggleInfoWindow(index)}>
-                    <div>
+                    <div style={{ maxWidth: '150px' }}>
                       <div>{ place.location }</div>
                       {
                         place.funFact ?
