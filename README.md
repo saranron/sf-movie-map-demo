@@ -1,4 +1,4 @@
-## SF Movies Map
+## [SF Movies Map](http://saranron.github.io/sf-movie-map-demo)
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app) to quickly create a simple react app. It is well documented regarding usage with other popular libraries such as react-router and flow. Extending the app later with router, or changing the type-checking system to flow will be easier. Test runner is also included and pre-configured so testing works out of the box.
 
@@ -6,7 +6,9 @@ This project uses [prop-types](https://github.com/facebook/prop-types) for type 
 
 For testing, this project uses [enzyme](https://github.com/airbnb/enzyme) for component testing, and [enzyme-matchers](https://github.com/FormidableLabs/enzyme-matchers) for improved assertion readability.
 
-This project does not use any state management libraries, as the state is quite simple. When the state will be more complex, redux can be integrated and much of the code can be rewritten easily since the functions are written as pure functions. Api usage
+This project does not use any state management libraries, as the state is quite simple. When the state will be more complex, redux can be integrated and much of the code can be rewritten easily since the functions are written as pure functions. Asynchronous api calls are made with web api fetch. However, it can be replaced with any library if so wished since the apis are maintained in own folder.
+
+Please find the app at http://saranron.github.io/sf-movie-map-demo.
 
 #### Further improvements
 
