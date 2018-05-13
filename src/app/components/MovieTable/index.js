@@ -2,13 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'antd';
 
+import { MovieShape } from '../../shapes';
 import './styles.css';
 
 class MovieTable extends React.Component {
-  onLocationClicked = location => () => {
-    this.props.onLocationSelectionChanged({ ...location });
-  };
-
   getColumnsDefinition = () => ([{
     title: 'Title',
     dataIndex: 'title',
@@ -20,64 +17,31 @@ class MovieTable extends React.Component {
     key: 'releaseYear',
     className: 'movie-table-column--year',
   }, {
-    title: 'Production Company',
-    dataIndex: 'productionCompany',
-    key: 'productionCompany',
-    className: 'movie-table-column--company',
-  }, {
     title: 'Director',
     dataIndex: 'director',
     key: 'director',
     className: 'movie-table-column--director',
-  }, {
-    title: 'Actors',
-    key: 'actors',
-    dataIndex: 'actors',
-    className: 'movie-table-column--actors',
-    render: (text, record) => (
-      <ul>
-        {
-          record.actors.map(actor => (<li key={actor}>{actor}</li>))
-        }
-      </ul>
-    ),
   }]);
 
-  rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      this.props.onMovieSelectionChanged(selectedRows);
-    },
+  selectRow = (record) => {
+    this.props.onMovieSelectionChanged(record);
   };
-
-  renderLocations = movie => (
-    movie.locations.length === 0 ?
-      <div className="movie-location-list--empty">No location data</div> :
-      <div className="movie-location-list">
-        {
-          movie.locations.map(location => (
-            // eslint-disable-next-line
-            <li
-              key={location.location}
-              onClick={this.onLocationClicked(location)}
-            >
-              {location.location}
-            </li>
-          ))
-        }
-      </div>
-  );
 
   render() {
     return (
       <Table
         className={`movie-table ${this.props.className}`}
         rowKey="title"
+        size="middle"
+        pagination="top"
         loading={this.props.isLoading}
         dataSource={this.props.movies}
         columns={this.getColumnsDefinition()}
-        expandRowByClick
-        expandedRowRender={this.renderLocations}
-        rowSelection={this.rowSelection}
+        onRow={record => ({
+          onClick: () => {
+            this.selectRow(record);
+          },
+        })}
       />
     );
   }
@@ -88,25 +52,13 @@ MovieTable.defaultProps = {
   isLoading: false,
   movies: [],
   onMovieSelectionChanged: () => {},
-  onLocationSelectionChanged: () => {},
 };
 
 MovieTable.propTypes = {
   className: PropTypes.string,
   isLoading: PropTypes.bool,
-  movies: PropTypes.arrayOf(PropTypes.shape({
-    title: PropTypes.string.required,
-    director: PropTypes.string,
-    releaseYear: PropTypes.string,
-    productionCompany: PropTypes.string,
-    locations: PropTypes.arrayOf(PropTypes.shape({
-      location: PropTypes.string,
-      funFact: PropTypes.string,
-    })),
-    actors: PropTypes.arrayOf(PropTypes.string),
-  })),
+  movies: PropTypes.arrayOf(MovieShape),
   onMovieSelectionChanged: PropTypes.func,
-  onLocationSelectionChanged: PropTypes.func,
 };
 
 export default MovieTable;

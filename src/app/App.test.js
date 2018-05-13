@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import App from './App';
 import Map from './components/Map';
 import MovieTable from './components/MovieTable';
+import MovieInfo from './components/MovieInfo';
 
 describe('<App />', () => {
   let wrapper;
@@ -22,9 +23,20 @@ describe('<App />', () => {
     wrapper = shallow(<App />);
   });
 
-  it('renders without crashing', () => {
+  it('should render Map and MovieTable, but not MovieInfo', () => {
     expect(wrapper.find(Map)).toExist();
     expect(wrapper.find(MovieTable)).toExist();
+    expect(wrapper.find(MovieInfo)).not.toExist();
+  });
+
+  it('should render MovieInfo when selectedMovie is set', () => {
+    const movie = {
+      title: 'movie 1',
+      locations: [{ location: 'location 1' }],
+    };
+    wrapper.setState({ selectedMovie: movie });
+
+    expect(wrapper.find(MovieInfo)).toExist();
   });
 
   test('componentDidMount should call api to get movies', async () => {
@@ -38,25 +50,38 @@ describe('<App />', () => {
     expect(wrapper).toHaveState({ movies: expected });
   });
 
-  test('selectMovieLocations saves all locations of movie objects in state', () => {
-    const selectedMovies = [
-      { locations: [{ location: 'location1' }] },
-      { locations: [{ location: 'location2' }] },
-    ];
-    const expected = [
-      expect.objectContaining({ location: 'location1' }),
-      expect.objectContaining({ location: 'location2' }),
-    ];
-    wrapper.instance().selectMovieLocations(selectedMovies);
+  test('selectMovie should set selectedMovie and markedPlaces in state', () => {
+    const movie = {
+      title: 'movie 1',
+      locations: [{ location: 'location 1' }],
+    };
+    const expected = {
+      selectedMovie: movie,
+      markedPlaces: movie.locations,
+    };
 
-    expect(wrapper).toHaveState({ markedPlaces: expected });
+    wrapper.instance().selectMovie(movie);
+
+    expect(wrapper).toHaveState(expected);
   });
 
-  test('selectSingleLocation saves the selected location in state', () => {
+  test('selectSingleLocation sets the selected location in state', () => {
     const location = { location: 'location1' };
     const expected = [location];
     wrapper.instance().selectSingleLocation(location);
 
     expect(wrapper).toHaveState({ markedPlaces: expected });
   });
+
+  test('selectSingleLocation sets selectedMovie.locations in state when argument is undefined', () => {
+    const selectedMovie = {
+      title: 'movie 1',
+      locations: [{ location: 'location 1' }],
+    };
+    wrapper.setState({ selectedMovie });
+
+    wrapper.instance().selectSingleLocation();
+
+    expect(wrapper).toHaveState({ markedPlaces: selectedMovie.locations });
+  })
 });

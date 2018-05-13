@@ -6,7 +6,6 @@ import MovieTable from '../index';
 describe('<MovieTable />', () => {
   const props = {
     onMovieSelectionChanged: jest.fn(),
-    onLocationSelectionChanged: jest.fn(),
   };
   let wrapper;
 
@@ -22,52 +21,29 @@ describe('<MovieTable />', () => {
     expect(wrapper.find(Table)).toExist();
   });
 
-  test('onLocationClicked should invoke onLocationSelectionChanged callback', () => {
-    const location = { location: 'location' };
+  it('should have 3 columns', () => {
+    const columnsDefinition = wrapper.instance().getColumnsDefinition();
 
-    wrapper.instance().onLocationClicked(location)();
-
-    expect(props.onLocationSelectionChanged).toHaveBeenCalledTimes(1);
-    expect(props.onLocationSelectionChanged).toHaveBeenCalledWith(location);
+    expect(columnsDefinition).toHaveLength(3);
   });
 
-  describe('getColumnsDefinition', () => {
-    test('actor column renderer should render a list of actors', () => {
-      const columnsDefinition = wrapper.instance().getColumnsDefinition();
-      const actorColumn = columnsDefinition.find(definition => definition.dataIndex === 'actors');
-      const text = 'text';
-      const record = { actors: ['a', 'b', 'c'] };
+  test('selectRow should invoke onMovieSelectionChanged', () => {
+    const record = {};
 
-      const columnWrapper = shallow(actorColumn.render(text, record));
-      expect(columnWrapper.find('li').length).toBe(record.actors.length);
-    });
+    wrapper.instance().selectRow(record);
+
+    expect(props.onMovieSelectionChanged).toHaveBeenCalledTimes(1);
+    expect(props.onMovieSelectionChanged).toHaveBeenCalledWith(record);
   });
 
-  describe('renderLocations', () => {
-    it('should render a div with no data message', () => {
-      const movie = { locations: [] };
-      const actual = shallow(wrapper.instance().renderLocations(movie));
+  it('should invoke selectRow on row clicked', () => {
+    const record = {};
+    wrapper.instance().selectRow = jest.fn();
 
-      expect(actual).toContainReact(<div className="movie-location-list--empty">No location data</div>);
-    });
+    const tableWrapper = wrapper.find(Table);
+    tableWrapper.props().onRow(record).onClick();
 
-    it('should render the location list items', () => {
-      const movie = { locations: [{ location: '1' }, { location: '2' }] };
-      const actual = shallow(wrapper.instance().renderLocations(movie));
-
-      expect(actual.find('li').length).toBe(movie.locations.length);
-    });
-  });
-
-  describe('rowSelection', () => {
-    it('should invoke onMovieSelectionChanged onChange', () => {
-      const selectedRowKeys = [1, 2, 3];
-      const selectedRows = [{ key: 1 }, { key: 2 }, { key: 3 }];
-
-      wrapper.instance().rowSelection.onChange(selectedRowKeys, selectedRows);
-
-      expect(props.onMovieSelectionChanged).toHaveBeenCalledTimes(1);
-      expect(props.onMovieSelectionChanged).toHaveBeenCalledWith(selectedRows);
-    });
+    expect(wrapper.instance().selectRow).toHaveBeenCalledTimes(1);
+    expect(wrapper.instance().selectRow).toHaveBeenCalledWith(record);
   });
 });

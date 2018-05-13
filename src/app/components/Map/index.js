@@ -44,9 +44,16 @@ class Map extends React.Component {
               defaultDraggable={false}
             >
               {
-                visibleWindowIndex === index && place.funFact ?
+                visibleWindowIndex === index ?
                   <InfoWindow key={place.location} onCloseClick={this.toggleInfoWindow(index)}>
-                    <span>{ place.funFact }</span>
+                    <div>
+                      <div>{ place.location }</div>
+                      {
+                        place.funFact ?
+                          <div>Fun fact: { place.funFact }</div> :
+                          null
+                      }
+                    </div>
                   </InfoWindow> :
                   null
               }

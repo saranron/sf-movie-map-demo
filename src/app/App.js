@@ -3,6 +3,7 @@ import 'antd/dist/antd.css';
 
 import Map from './components/Map';
 import MovieTable from './components/MovieTable';
+import MovieInfo from './components/MovieInfo';
 import Api from './apis';
 import './App.css';
 
@@ -13,6 +14,7 @@ class App extends Component {
     this.state = {
       movies: [],
       markedPlaces: [],
+      selectedMovie: undefined,
       isLoading: false,
     };
   }
@@ -33,13 +35,21 @@ class App extends Component {
     }
   };
 
-  selectMovieLocations = (movies) => {
-    const places = movies.reduce((locations, movie) => [...locations, ...movie.locations], []);
-    this.setState({ markedPlaces: places });
+  selectMovie = (movie) => {
+    this.setState({
+      selectedMovie: movie,
+      markedPlaces: movie.locations,
+    });
   };
 
   selectSingleLocation = (location) => {
-    this.setState({ markedPlaces: [location] });
+    if (location) {
+      this.setState({ markedPlaces: [location] });
+    } else {
+      this.setState({
+        markedPlaces: this.state.selectedMovie.locations,
+      });
+    }
   };
 
   render() {
@@ -49,12 +59,23 @@ class App extends Component {
           <Map places={this.state.markedPlaces} />
         </div>
         <div className="app-box">
-          <MovieTable
-            isLoading={this.state.isLoading}
-            movies={this.state.movies}
-            onMovieSelectionChanged={this.selectMovieLocations}
-            onLocationSelectionChanged={this.selectSingleLocation}
-          />
+          <div className="movie-table">
+            <MovieTable
+              isLoading={this.state.isLoading}
+              movies={this.state.movies}
+              onMovieSelectionChanged={this.selectMovie}
+            />
+          </div>
+          <div className="movie-info">
+            {
+              this.state.selectedMovie ?
+                <MovieInfo
+                  movie={this.state.selectedMovie}
+                  onLocationSelectionChanged={this.selectSingleLocation}
+                /> :
+                <div className="movie-info__placeholder">Select a movie from the left</div>
+            }
+          </div>
         </div>
       </div>
     );
