@@ -6,20 +6,17 @@ import './styles.css';
 
 class MovieInfo extends React.PureComponent {
   state = {
-    selectedLocation: undefined,
     areAllLocationsVisible: true,
   };
 
-  toggleLocations = () => {
-    const areAllLocationsVisible = typeof this.state.selectedLocation === 'undefined';
-    const selectedLocation = areAllLocationsVisible ? undefined : this.state.selectLocation;
-    this.setState({ areAllLocationsVisible, selectedLocation });
-    this.props.onLocationSelectionChanged(selectedLocation);
+  showAllLocations = () => {
+    this.setState({ areAllLocationsVisible: true });
+    this.props.onLocationSelectionChanged(undefined);
   };
 
   selectLocation = location => () => {
+    this.setState({ areAllLocationsVisible: false });
     this.props.onLocationSelectionChanged(location);
-    this.setState({ areAllLocationsVisible: false, selectedLocation: location });
   };
 
   render() {
@@ -42,7 +39,7 @@ class MovieInfo extends React.PureComponent {
           <div className="movie-info__title--right">
             <button
               className="movie-info__show-all-button"
-              onClick={this.toggleLocations}
+              onClick={this.showAllLocations}
               disabled={areAllLocationsVisible}
             >
               Show all locations

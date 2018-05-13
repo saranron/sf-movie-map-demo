@@ -4,6 +4,7 @@ import { Marker } from 'react-google-maps';
 
 import { GEOCODE_STATUS } from '../geocoderApi';
 import AddressMarker from '../AddressMarker';
+import { mockGeocode, mockGeocodeResponse } from '../../../../testUtils';
 
 describe('<AddressMarker />', () => {
   const address = 'Tokyo';
@@ -31,21 +32,7 @@ describe('<AddressMarker />', () => {
       onAddressError,
     };
     const latLng = { lat: 10, lng: -10 };
-    const place = {
-      geometry: {
-        location: {
-          lat: () => latLng.lat,
-          lng: () => latLng.lng,
-        },
-      },
-    };
-    const mockGeocode = (result, status) => {
-      window.google.maps.Geocoder = class {
-        geocode = jest.fn().mockImplementation((request, callback) => {
-          callback(result, status);
-        });
-      };
-    };
+    const response = mockGeocodeResponse(latLng);
 
     beforeAll(() => {
       jest.useFakeTimers();
@@ -65,9 +52,8 @@ describe('<AddressMarker />', () => {
     });
 
     test('componentDidMount should set state', () => {
-      const result = [place];
       const status = GEOCODE_STATUS.OK;
-      mockGeocode(result, status);
+      mockGeocode(response, status);
 
       const wrapper = shallow(
         <AddressMarker {...callbackProps} />,
@@ -82,9 +68,8 @@ describe('<AddressMarker />', () => {
     });
 
     test('componentDidMount should invoke onAddressLoaded callback', () => {
-      const result = [place];
       const status = GEOCODE_STATUS.OK;
-      mockGeocode(result, status);
+      mockGeocode(response, status);
 
       const wrapper = shallow(
         <AddressMarker {...callbackProps} />,

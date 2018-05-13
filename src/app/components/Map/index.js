@@ -7,7 +7,7 @@ import AddressMarker from './AddressMarker';
 import MAP_DEFAULTS, { MAP_API_ENDPOINT } from './constants';
 import geocoderApi from './geocoderApi';
 
-class Map extends React.Component {
+export class Map extends React.Component {
   constructor(props) {
     super(props);
     this.geocoder = null;
@@ -15,6 +15,15 @@ class Map extends React.Component {
       defaultLocation: MAP_DEFAULTS.DEFAULT_LOCATION,
       visibleWindowIndex: undefined,
     };
+  }
+
+  componentDidMount() {
+    const request = { address: MAP_DEFAULTS.DEFAULT_PLACE };
+    const geocoder = new window.google.maps.Geocoder();
+    geocoderApi(geocoder, request).then((result) => {
+      const { location } = result.geometry;
+      this.setState({ defaultLocation: { lat: location.lat(), lng: location.lng() } });
+    });
   }
 
   toggleInfoWindow = index => () => {
@@ -83,15 +92,4 @@ const mapProps = {
   mapElement: <div style={{ height: '100%' }} />,
 };
 
-const withLifeCycle = lifecycle({
-  componentDidMount() {
-    const request = { address: MAP_DEFAULTS.DEFAULT_PLACE };
-    const geocoder = new window.google.maps.Geocoder();
-    geocoderApi(geocoder, request).then((result) => {
-      const { location } = result.geometry;
-      this.setState({ defaultLocation: { lat: location.lat(), lng: location.lng() } });
-    });
-  },
-});
-
-export default compose(withProps(mapProps), withScriptjs, withGoogleMap, withLifeCycle)(Map);
+export default compose(withProps(mapProps), withScriptjs, withGoogleMap)(Map);
