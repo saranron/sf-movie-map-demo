@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Marker } from 'react-google-maps';
 
 import MAP_DEFAULTS from './constants';
-import geocodeApi from './geocoderApi';
+import geocodeApi from '../../apis/geocoderApi';
 
 class AddressMarker extends React.Component {
   constructor(props) {

@@ -4,7 +4,7 @@ import 'antd/dist/antd.css';
 import Map from './components/Map';
 import MovieTable from './components/MovieTable';
 import MovieInfo from './components/MovieInfo';
-import Api from './apis';
+import Api from './apis/movieApi';
 import './App.css';
 
 class App extends Component {

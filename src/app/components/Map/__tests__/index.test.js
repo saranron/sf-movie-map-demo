@@ -2,9 +2,9 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { GoogleMap, InfoWindow } from 'react-google-maps';
 
-import MapWithGoogleScript, { Map } from '../index';
+import { Map } from '../index';
 import AddressMarker from '../AddressMarker';
-import { GEOCODE_STATUS } from '../geocoderApi';
+import { GEOCODE_STATUS } from '../../../apis/geocoderApi';
 import { mockGeocode, mockGeocodeResponse } from '../../../../testUtils';
 
 fdescribe('<Map />', () => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { Marker } from 'react-google-maps';
 
-import { GEOCODE_STATUS } from '../geocoderApi';
+import { GEOCODE_STATUS } from '../../../apis/geocoderApi';
 import AddressMarker from '../AddressMarker';
 import { mockGeocode, mockGeocodeResponse } from '../../../../testUtils';
 

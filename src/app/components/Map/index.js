@@ -5,7 +5,7 @@ import { GoogleMap, withGoogleMap, withScriptjs, InfoWindow } from 'react-google
 
 import AddressMarker from './AddressMarker';
 import MAP_DEFAULTS, { MAP_API_ENDPOINT } from './constants';
-import geocoderApi from './geocoderApi';
+import geocoderApi from '../../apis/geocoderApi';
 
 export class Map extends React.Component {
   constructor(props) {
